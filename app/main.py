@@ -1,9 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
-from app.services.matching import match
-from app.services.parser import extract_text_from_pdf
-from app.services.skills import extract_skills
-from app.services.suggestions import generate_suggestions
+from services.matching import match
+from services.parser import extract_text_from_pdf
+from services.skills import extract_skills
+from services.suggestions import generate_suggestions
 import shutil, os
 
 app = FastAPI()
