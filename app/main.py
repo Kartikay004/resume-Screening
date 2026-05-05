@@ -78,7 +78,7 @@ async def home():
     </head>
     <body>
         <div class="box">
-            <h1>ATS Resume Analyzer</h1>
+            <h1>ATS Resume Analyzer 🚀</h1>
             <p>Upload Resume PDF and Paste Job Description</p>
 
             <form id="resumeForm">
@@ -157,22 +157,8 @@ async def upload_resume(
         if os.path.exists(file_path):
             os.remove(file_path)
 
+    # 🔥 Improved scoring logic
     base_score = match(resume_text, job_description)
-
-resume_skills = extract_skills(resume_text)
-job_skills = extract_skills(job_description)
-
-matched = list(set(resume_skills) & set(job_skills))
-missing = list(set(job_skills) - set(resume_skills))
-
-# Skill boost
-if len(job_skills) > 0:
-    skill_score = len(matched) / len(job_skills)
-else:
-    skill_score = 0
-
-# Final score (weighted)
-final_score = (0.6 * base_score) + (0.4 * skill_score)
 
     resume_skills = extract_skills(resume_text)
     job_skills = extract_skills(job_description)
@@ -180,10 +166,19 @@ final_score = (0.6 * base_score) + (0.4 * skill_score)
     matched = list(set(resume_skills) & set(job_skills))
     missing = list(set(job_skills) - set(resume_skills))
 
+    # Skill score
+    if len(job_skills) > 0:
+        skill_score = len(matched) / len(job_skills)
+    else:
+        skill_score = 0
+
+    # Final score
+    final_score = (0.6 * base_score) + (0.4 * skill_score)
+
     suggestions = generate_suggestions(missing)
 
     return {
-        "match_score": score,
+        "match_score": final_score,
         "matched_skills": matched,
         "missing_skills": missing,
         "suggestions": suggestions
