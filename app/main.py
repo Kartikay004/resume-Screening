@@ -7,9 +7,23 @@ from services.suggestions import generate_suggestions
 import shutil
 import os
 
+from fastapi import FastAPI, UploadFile, File
+from s3_upload import upload_resume
+
 app = FastAPI()
 
 
+app = FastAPI()
+
+@app.post("/upload")
+async def upload(file: UploadFile = File(...)):
+
+    with open(file.filename, "wb") as f:
+        f.write(await file.read())
+
+    upload_resume(file.filename, file.filename)
+
+    return {"message": "Resume uploaded to AWS S3"}
 # ================= HOME PAGE =================
 @app.get("/", response_class=HTMLResponse)
 async def home():
